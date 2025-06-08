@@ -130,8 +130,7 @@ Sample Output:
 }
 
 Use Case: Suitable for movie studios, streaming platforms, and film researchers to measure audience engagement and emotional impact.
-📜 License
-This project is licensed under the MIT License - see the LICENSE file for details.
+
 
 🙋‍♂️ Author
 Hemant — Final Year Computer Engineering Student
@@ -146,5 +145,31 @@ If you found this project useful, feel free to ⭐ the repo and connect with me!
 ![Aggregated Result](Screenshots/output4.png)
 
 
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙋‍♂️ Author
+
+**Hemant — Final Year Computer Engineering Student**  
+If you found this project useful, feel free to ⭐ the repo and connect with me!
+
+---
+
+## 📞 Support / Contact
+
+If you have any queries, suggestions, or need help setting up or running the project, feel free to contact me:
+
+**👨‍💻 Hemant**  
+📱 **Phone**: +91-9172010257
+📧 **Email**: hemantpatil17072004@gmail.com  
+📍 Final Year Computer Engineering Student  
+
+---
 
 
