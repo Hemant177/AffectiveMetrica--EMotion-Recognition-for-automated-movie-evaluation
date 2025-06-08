@@ -141,7 +141,7 @@ If you found this project useful, feel free to ⭐ the repo and connect with me!
 
 ✅ **Next Steps for You:**
 
-- Add your screenshots (`landing_page.png`, `output_result.png`, etc.) in a `screenshots/` folder inside your repo.
+- Add your screenshots (`output1.png`, `output_result.png`, etc.) in a `screenshots/` folder inside your repo.
 - If you don’t have a `LICENSE` file, you can quickly generate one on GitHub using the MIT license.
 
 Let me know if you'd like a version with a short video demo section or badges (like GitHub stars, last commit, etc.).
