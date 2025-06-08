@@ -1,0 +1,2 @@
+# AffectiveMetrica--EMotion-Recognition-for-automated-movie-evaluation
+Affective Metrica is a real-time emotion recognition system that analyzes viewer facial expressions while watching movies. Using deep learning (ResNet101v2) and computer vision, it detects emotions like happy, sad, angry, etc., aggregates them, and displays results on a user-friendly UI. Ideal for automated movie evaluation and audience feedback.
