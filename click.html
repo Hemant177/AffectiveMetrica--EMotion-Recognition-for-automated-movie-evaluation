@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Movie Search & Watchlist</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"/>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url('src/images/home.jpeg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: -1;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+    }
+    .navbar h2 {
+      display: flex;
+      align-items: center;
+      color: rgb(16,16,16);
+    }
+    .navbar h2 i {
+      margin-right: 10px;
+      color: #f39c12;
+      font-size: 24px;
+    }
+    .navbar a {
+      color: rgb(16, 16, 16);
+      text-decoration: none;
+      margin-left: 15px;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+    .navbar a:hover {
+      color: #ff5757;
+    }
+    .search-section,
+    #watchlist {
+      padding: 40px 10%;
+      text-align: center;
+    }
+    input {
+      padding: 10px;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 25px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      text-align: center;
+    }
+    .search-results,
+    #watchlist-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .movie-box {
+      background: rgba(255, 255, 255, 0.85);
+      color: black;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      margin: 15px;
+      width: 200px;
+      box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+      transition: transform 0.3s;
+    }
+    .movie-box:hover {
+      transform: scale(1.05);
+    }
+    .movie-box img {
+      width: 100%;
+      border-radius: 8px;
+    }
+    .movie-box button {
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.3s;
+    }
+    .movie-box .add-review {
+      background: #28a745;
+    }
+    .movie-box .add-review:hover {
+      background: #218838;
+    }
+    .movie-box .remove {
+      background: #ff5757;
+    }
+    .movie-box .remove:hover {
+      background: #ff2e2e;
+    }
+    .popup {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #28a745;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 5px;
+      display: none;
+      font-size: 16px;
+      animation: fadeInOut 2s ease-in-out;
+    }
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+      20% { opacity: 1; transform: translateX(-50%) translateY(0); }
+      80% { opacity: 1; }
+      100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    }
+    .search-section h1,
+    #watchlist h2 {
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <h2>
+      <i class="fas fa-clapperboard"></i> Affective Metrica
+    </h2>
+    <nav>
+      <a href="#" id="watchlist-link">Watchlist (<span id="watchlist-count">0</span>)</a>
+      <a href="index.html">Sign Out</a>
+    </nav>
+  </header>
+
+  <section class="search-section">
+    <h1>Find Your Favorite Movies</h1>
+    <input type="text" id="search-movie" placeholder="Type a movie name..." oninput="fetchMovieData()" />
+    <div id="movie-results" class="search-results"></div>
+  </section>
+
+  <section id="watchlist">
+    <h2>Your Watchlist</h2>
+    <div id="watchlist-container"></div>
+  </section>
+
+  <div id="popup" class="popup"></div>
+
+  <script>
+    document.getElementById('watchlist-link').addEventListener('click', function (event) {
+      event.preventDefault();
+      document.getElementById('watchlist').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    function fetchMovieData() {
+      const movieName = document.getElementById('search-movie').value.trim();
+      if (movieName.length < 3) {
+        document.getElementById('movie-results').innerHTML = "";
+        return;
+      }
+
+      fetch(`https://www.omdbapi.com/?s=${encodeURIComponent(movieName)}&apikey=20eeb7b1`)
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById('movie-results').innerHTML =
+            data.Response === "True"
+              ? data.Search.map((movie) => `
+                  <div class="movie-box">
+                    <img src="${movie.Poster}" alt="${movie.Title}" />
+                    <h3>${movie.Title}</h3>
+                    <p><strong>Year:</strong> ${movie.Year}</p>
+                    <button onclick="addToWatchlist('${movie.Title}', '${movie.Poster}')" class="remove">
+                      Add to Watchlist
+                    </button>
+                  </div>`).join("")
+              : "<p>No movies found!</p>";
+        });
+    }
+
+    function addToWatchlist(title, poster) {
+      let watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+      if (!watchlist.some((movie) => movie.title === title)) {
+        watchlist.push({ title, poster, review: "" });
+        localStorage.setItem('watchlist', JSON.stringify(watchlist));
+        displayWatchlist();
+        showPopup(`${title} added to watchlist!`);
+      } else {
+        showPopup(`${title} is already in your watchlist!`, true);
+      }
+    }
+
+    function displayWatchlist() {
+      let watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+      document.getElementById('watchlist-container').innerHTML = watchlist
+        .map((movie) => `
+          <div class="movie-box">
+            <img src="${movie.poster}" alt="${movie.title}" />
+            <h3>${movie.title}</h3>
+            <button onclick="addReview('${movie.title}')" class="add-review">Add Review</button>
+            <button onclick="removeFromWatchlist('${movie.title}')" class="remove">Remove</button>
+          </div>`).join("");
+      document.getElementById('watchlist-count').textContent = watchlist.length;
+    }
+
+    function removeFromWatchlist(title) {
+      let watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+      localStorage.setItem('watchlist', JSON.stringify(watchlist.filter((movie) => movie.title !== title)));
+      displayWatchlist();
+    }
+
+    function addReview(title) {
+      fetch("http://localhost:5000/run-model")
+        .then(response => {
+          if (response.ok) {
+            showPopup("🎥 Emotion detection started! Press 'q' to stop webcam.");
+            waitForEmotion(title);
+          } else {
+            showPopup("❌ Failed to start model!", true);
+          }
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          showPopup("⚠ Server error!", true);
+        });
+    }
+
+    function waitForEmotion(title) {
+      let attempts = 0;
+      const interval = setInterval(() => {
+        fetch("http://localhost:5000/get-emotion")
+          .then(response => response.json())
+          .then(data => {
+            if (data.status === "done") {
+              clearInterval(interval);
+              showPopup(`🎭 Final Emotion for ${title}: ${data.emotion}`);
+            } else {
+              attempts++;
+              if (attempts > 60) {
+                clearInterval(interval);
+                showPopup("⏳ Timeout: No emotion result", true);
+              }
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            clearInterval(interval);
+            showPopup("⚠ Error reading emotion", true);
+          });
+      }, 2000);
+    }
+
+    function showPopup(message, isError = false) {
+      const popup = document.getElementById('popup');
+      popup.textContent = message;
+      popup.style.backgroundColor = isError ? "#dc3545" : "#28a745";
+      popup.style.display = "block";
+      setTimeout(() => {
+        popup.style.display = "none";
+      }, 3000);
+    }
+
+    window.onload = displayWatchlist;
+  </script>
+</body>
+</html>
