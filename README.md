@@ -139,11 +139,12 @@ If you found this project useful, feel free to ⭐ the repo and connect with me!
 
 ---
 
-✅ **Next Steps for You:**
 
-- Add your screenshots (`Output1.png`, `output2.png`,`Output3.png`,`output4.png` etc.) in a `Screenshots/` folder inside your repo.
-- If you don’t have a `LICENSE` file, you can quickly generate one on GitHub using the MIT license.
+![Landing Page](Screenshots/Output1.png)
+![Emotion Detection](Screenshots/output2.png)
+![Terminal Output](Screenshots/Output3.png)
+![Aggregated Result](Screenshots/output4.png)
 
-Let me know if you'd like a version with a short video demo section or badges (like GitHub stars, last commit, etc.).
+
 
 
